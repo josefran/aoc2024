@@ -17,14 +17,14 @@ class Day1Test {
                 3   3
                 """.trim();
         List<String> lines = List.of(input.split("\n"));
-        int result = new Day1().execute(lines);
+        int result = new Day1().executePart1(lines);
         assertEquals(11, result);
     }
 
     @Test
     void testPart1Result() {
         List<String> lines = InputProvider.input("day1");
-        int result = new Day1().execute(lines);
+        int result = new Day1().executePart1(lines);
         System.out.println(result);
     }
 
@@ -39,14 +39,14 @@ class Day1Test {
                 3   3
                 """.trim();
         List<String> lines = List.of(input.split("\n"));
-        int result = new Day1().executeCase2(lines);
+        int result = new Day1().executePart2(lines);
         assertEquals(31, result);
     }
 
     @Test
     void testPart2Result() {
         List<String> lines = InputProvider.input("day1");
-        int result = new Day1().executeCase2(lines);
+        int result = new Day1().executePart2(lines);
         System.out.println(result);
     }
 }

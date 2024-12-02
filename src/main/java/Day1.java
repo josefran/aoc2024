@@ -5,7 +5,7 @@ import java.util.stream.Collectors;
 
 public class Day1 {
 
-    public int execute(List<String> lines) {
+    public int executePart1(List<String> lines) {
         SortedLists sortedLists = calculateSortedLists(lines);
 
         List<Pair> sortedPairs = new LinkedList<>();
@@ -31,7 +31,7 @@ public class Day1 {
         return new SortedLists(leftSorted, rightSorted);
     }
 
-    public int executeCase2(List<String> lines) {
+    public int executePart2(List<String> lines) {
         SortedLists sortedLists = calculateSortedLists(lines);
         // Calculate number apparitions leftList number in rightList
 
