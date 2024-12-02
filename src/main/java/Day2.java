@@ -41,44 +41,44 @@ public class Day2 {
         }
 
         boolean isSecure() {
-            boolean isSecure = true;
-            TypeLevel typeLevel = typeOfIncrement(0, 1);
+            TypeLevel typeLevel = typeOfIncrement(0);
+            if (typeLevel == TypeLevel.SAME_LEVEL) return false;
             for (int i = 0; i < levels.size(); i++) {
                 int nextIndex = i + 1;
                 if (nextIndex < levels.size()) {
-                    if (changeIncrement(typeLevel, i, nextIndex)) return false;
-                    if (isDistanceExcessive(i, nextIndex)) return false;
+                    if (changeIncrement(typeLevel, i)) return false;
+                    if (isDistanceExcessive(i)) return false;
                 }
             }
-            return isSecure;
+            return true;
         }
 
         boolean isSecureWithTolerance() {
             if (isSecure()) return true;
-            List<Boolean> anySecure = new LinkedList<>();
-            for (int i = 1; i < levels.size(); i++) {
+            for (int i = 0; i < levels.size(); i++) {
                 List<Integer> auxLevels = new LinkedList<>(levels);
                 auxLevels.remove(i);
-                anySecure.add(new Report(auxLevels).isSecure());
+                boolean secure = new Report(auxLevels).isSecure();
+                if (secure) return true;
             }
-            return anySecure.stream().anyMatch(s -> s);
+            return false;
         }
 
-        private boolean isDistanceExcessive(int i, int nextIndex) {
-            return !checkDistanceLessThan(i, nextIndex, 4);
+        private boolean isDistanceExcessive(int i) {
+            return !checkDistanceLessThan(i);
         }
 
-        private boolean changeIncrement(TypeLevel typeLevel, int i, int nextIndex) {
-            return typeLevel != typeOfIncrement(i, nextIndex);
+        private boolean changeIncrement(TypeLevel typeLevel, int i) {
+            return typeLevel != typeOfIncrement(i);
         }
 
-        boolean checkDistanceLessThan(int i1, int i2, int limit) {
-            return Math.abs(levels.get(i2) - levels.get(i1)) < limit;
+        boolean checkDistanceLessThan(int i1) {
+            return Math.abs(levels.get(i1 + 1) - levels.get(i1)) < 4; // && 0 < Math.abs(levels.get(i2) - levels.get(i1)) ;
         }
 
-        TypeLevel typeOfIncrement(int  i1, int i2) {
-            if (levels.get(i1).equals(levels.get(i2))) return TypeLevel.SAME_LEVEL;
-            else if (levels.get(i1) - levels.get(i2) > 0) return TypeLevel.INCREASE;
+        TypeLevel typeOfIncrement(int i1) {
+            if (levels.get(i1).equals(levels.get(i1 + 1))) return TypeLevel.SAME_LEVEL;
+            else if (levels.get(i1) - levels.get(i1 + 1) > 0) return TypeLevel.INCREASE;
             else return TypeLevel.DECREASE;
         }
 

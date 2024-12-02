@@ -8,7 +8,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 class Day2Test {
 
     @Test
-    void testPar1() {
+    void testPart1() {
         String input = """
                 7 6 4 2 1
                 1 2 7 8 9
@@ -49,13 +49,6 @@ class Day2Test {
         List<String> lines = InputProvider.input("day2");
         int result = new Day2().executePart2(lines);
         System.out.println(result);
-    }
-
-    @Test
-    void testErrorCase() {
-        Day2.Report report = new Day2.Report(List.of(78, 75, 77, 80, 81, 82));
-        assertThat(report.isSecure()).describedAs("Report should be non secure").isFalse();
-        assertThat(report.isSecureWithTolerance()).describedAs("Report should be non secure with tolerance").isFalse();
     }
 
 }
