@@ -1,3 +1,5 @@
+package avc2024;
+
 import java.io.IOException;
 import java.net.URISyntaxException;
 import java.nio.file.Files;
@@ -16,4 +18,15 @@ public class InputProvider {
             throw new RuntimeException(e);
         }
     }
+
+    static String inputToString(String resourcePathString) {
+        try {
+            ClassLoader systemClassLoader = ClassLoader.getSystemClassLoader();
+            Path path = Paths.get(Objects.requireNonNull(systemClassLoader.getResource(resourcePathString + "/input")).toURI());
+            return Files.readString(path);
+        } catch (IOException | URISyntaxException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
 }
