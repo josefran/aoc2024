@@ -45,9 +45,9 @@ public class Day3 {
             return multiplies;
         }
 
-        static List<Multiply> createWithEnabled(String line) {
+        static List<Multiply> createWithEnabled(String input) {
             Pattern pattern = Pattern.compile("(?<do>do)\\(\\)|(?<dont>don't)\\(\\)|(?<mul>mul)\\((?<a>\\d{1,3}),(?<b>\\d{1,3})\\)");
-            Matcher matcher = pattern.matcher(line);
+            Matcher matcher = pattern.matcher(input);
             List<Multiply> multiplies = new LinkedList<>();
 
             boolean enabled = true;
