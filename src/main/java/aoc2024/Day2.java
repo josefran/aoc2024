@@ -1,32 +1,29 @@
-package avc2024;
+package aoc2024;
 
 import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
 
-public class Day2 {
+public class Day2 implements Day {
 
-    public int executePart1(List<String> lines) {
-        List<Report> reports = buildReports(lines);
-
-        long numOfSecureReports = reports.stream()
+    @Override
+    public int executePart1(String input) {
+        List<Report> reports = buildReports(input);
+        return (int) reports.stream()
                 .filter(Report::isSecure)
                 .count();
-
-        return (int) numOfSecureReports;
     }
 
-    public int executePart2(List<String> lines) {
-        List<Report> reports = buildReports(lines);
-
-        long numOfSecureReports = reports.stream()
+    @Override
+    public int executePart2(String input) {
+        List<Report> reports = buildReports(input);
+        return (int) reports.stream()
                 .filter(Report::isSecureWithTolerance)
                 .count();
-
-        return (int) numOfSecureReports;
     }
 
-    private static List<Report> buildReports(List<String> lines) {
+    private static List<Report> buildReports(String input) {
+        List<String> lines = List.of(input.trim().split("\n"));
         List<Report> reports = new LinkedList<>();
         for (String line : lines) {
             line = line.trim();

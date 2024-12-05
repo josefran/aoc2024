@@ -1,12 +1,13 @@
-package avc2024;
+package aoc2024;
 
 import java.util.LinkedList;
 import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-public class Day3 {
+public class Day3 implements Day {
 
+    @Override
     public int executePart1(String input) {
         List<Multiply> multiplies = Multiply.create(input);
         if (multiplies.isEmpty()) {
@@ -18,6 +19,7 @@ public class Day3 {
                 .orElseThrow();
     }
 
+    @Override
     public int executePart2(String input) {
         List<Multiply> multiplies = Multiply.createWithEnabled(input);
         if (multiplies.isEmpty()) {

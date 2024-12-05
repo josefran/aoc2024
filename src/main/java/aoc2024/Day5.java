@@ -1,11 +1,11 @@
-package avc2024;
+package aoc2024;
 
 import java.util.*;
 import java.util.stream.Collectors;
 
-public class Day5 {
+public class Day5 implements Day {
 
-
+    @Override
     public int executePart1(String input) {
         String[] parts = input.split("\\r?\\n\\r?\\n");
         String pageOrderingRulesInput = parts[0];
@@ -20,6 +20,7 @@ public class Day5 {
                 .sum();
     }
 
+    @Override
     public int executePart2(String input) {
         String[] parts = input.split("\\r?\\n\\r?\\n");
         String pageOrderingRulesInput = parts[0];
@@ -79,12 +80,6 @@ public class Day5 {
             return listUpdates;
         }
 
-        public boolean isBefore(int value, int page) {
-            int pageIndex = pages.indexOf(page);
-            int valueIndex = pages.indexOf(value);
-            return valueIndex != -1 && pageIndex != -1 && valueIndex < pageIndex;
-        }
-
         public boolean isAfter(int value, int page) {
             int pageIndex = pages.indexOf(page);
             int valueIndex = pages.indexOf(value);
@@ -110,12 +105,11 @@ public class Day5 {
         }
 
         public void sortPages(Map<Integer, List<Integer>> pageOrderingRules) {
-            // Reorder pages using pageOrderingRules without use sort method
-            Comparator<? super Integer> comparator = extracted(pageOrderingRules);
+            Comparator<? super Integer> comparator = comparatorToReorder(pageOrderingRules);
             pages.sort(comparator);
         }
 
-        private static Comparator<? super Integer> extracted(Map<Integer, List<Integer>> pageOrderingRules) {
+        private static Comparator<? super Integer> comparatorToReorder(Map<Integer, List<Integer>> pageOrderingRules) {
              return (page1, page2) -> {
                  if (pageOrderingRules.getOrDefault(page1, new ArrayList<>()).contains(page2)) {
                      return -1;
