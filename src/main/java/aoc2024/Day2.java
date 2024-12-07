@@ -52,6 +52,7 @@ public class Day2 implements Day {
             return true;
         }
 
+        @SuppressWarnings("SuspiciousListRemoveInLoop")
         boolean isSecureWithTolerance() {
             if (isSecure()) return true;
             for (int i = 0; i < levels.size(); i++) {

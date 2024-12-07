@@ -7,14 +7,8 @@ public class Day5 implements Day {
 
     @Override
     public long executePart1(String input) {
-        String[] parts = input.split("\\r?\\n\\r?\\n");
-        String pageOrderingRulesInput = parts[0];
-        String updateInput = parts[1];
-
-        Map<Integer, List<Integer>> pageOrderingRules = extractPageOrderingRules(pageOrderingRulesInput);
-        String[] updates = updateInput.split("\r?\n");
-        List<Update> listUpdates = Update.createList(updates);
-        List<Update> correctUpdates = obtainCorrectlyOrderedUpdates(pageOrderingRules, listUpdates);
+        ManualPrinter manualPrinter = ManualPrinter.create(input);
+        List<Update> correctUpdates = manualPrinter.obtainCorrectlyOrderedUpdates();
         return correctUpdates.stream()
                 .mapToInt(Update::getMiddlePageNumber)
                 .sum();
@@ -22,46 +16,52 @@ public class Day5 implements Day {
 
     @Override
     public long executePart2(String input) {
-        String[] parts = input.split("\\r?\\n\\r?\\n");
-        String pageOrderingRulesInput = parts[0];
-        String updateInput = parts[1];
-
-        Map<Integer, List<Integer>> pageOrderingRules = extractPageOrderingRules(pageOrderingRulesInput);
-        String[] updates = updateInput.split("\r?\n");
-        List<Update> listUpdates = Update.createList(updates);
-        List<Update> incorrectUpdates = obtainIncorrectlyOrderedUpdates(pageOrderingRules, listUpdates);
+        ManualPrinter manualPrinter = ManualPrinter.create(input);
+        List<Update> incorrectUpdates = manualPrinter.obtainIncorrectlyOrderedUpdates();
         for (Update update : incorrectUpdates) {
-            update.sortPages(pageOrderingRules);
+            update.sortPages(manualPrinter.pageOrderingRules());
         }
         return incorrectUpdates.stream()
                 .mapToInt(Update::getMiddlePageNumber)
                 .sum();
     }
 
-    private Map<Integer, List<Integer>> extractPageOrderingRules(String pageOrderingRulesInput) {
-        Map<Integer, List<Integer>> map = new LinkedHashMap<>();
-        pageOrderingRulesInput.lines().forEach(line -> {
-            String[] split = line.split("\\|");
-            int key = Integer.parseInt(split[0]);
-            int value = Integer.parseInt(split[1]);
-            map.putIfAbsent(key, new ArrayList<>());
-            map.get(key).add(value);
-        });
-        return map;
-    }
+    private record ManualPrinter(Map<Integer, List<Integer>> pageOrderingRules, List<Update> listUpdates) {
 
-    private List<Update> obtainCorrectlyOrderedUpdates(Map<Integer, List<Integer>> pageOrderingRules, List<Update> listUpdates) {
-        return listUpdates.stream()
-                .filter(update -> update.isCorrectlyOrdered(pageOrderingRules))
-                .collect(Collectors.toList());
-    }
+        static ManualPrinter create(String input) {
+            String[] parts = input.split("\\r?\\n\\r?\\n");
+            String pageOrderingRulesInput = parts[0];
+            String updateInput = parts[1];
 
-    private List<Update> obtainIncorrectlyOrderedUpdates(Map<Integer, List<Integer>> pageOrderingRules, List<Update> listUpdates) {
-        return listUpdates.stream()
-                .filter(update -> !update.isCorrectlyOrdered(pageOrderingRules))
-                .collect(Collectors.toList());
-    }
+            Map<Integer, List<Integer>> pageOrderingRules = extractPageOrderingRules(pageOrderingRulesInput);
+            List<Update> listUpdates = Update.createList(updateInput);
+            return new ManualPrinter(pageOrderingRules, listUpdates);
+        }
 
+        List<Update> obtainCorrectlyOrderedUpdates() {
+            return listUpdates.stream()
+                    .filter(update -> update.isCorrectlyOrdered(pageOrderingRules))
+                    .collect(Collectors.toList());
+        }
+
+        List<Update> obtainIncorrectlyOrderedUpdates() {
+            return listUpdates.stream()
+                    .filter(update -> !update.isCorrectlyOrdered(pageOrderingRules))
+                    .collect(Collectors.toList());
+        }
+
+        static Map<Integer, List<Integer>> extractPageOrderingRules(String pageOrderingRulesInput) {
+            Map<Integer, List<Integer>> map = new LinkedHashMap<>();
+            pageOrderingRulesInput.lines().forEach(line -> {
+                String[] split = line.split("\\|");
+                int key = Integer.parseInt(split[0]);
+                int value = Integer.parseInt(split[1]);
+                map.putIfAbsent(key, new ArrayList<>());
+                map.get(key).add(value);
+            });
+            return map;
+        }
+    }
 
     public static class Update implements Iterable<Integer> {
         private final List<Integer> pages;
@@ -70,7 +70,8 @@ public class Day5 implements Day {
             this.pages = new ArrayList<>(pages);
         }
 
-        public static List<Update> createList(String[] updates) {
+        public static List<Update> createList(String updateInput) {
+            String[] updates = updateInput.split("\r?\n");
             List<Update> listUpdates = new ArrayList<>();
             for (String update : updates) {
                 String[] pages = update.split(",");
