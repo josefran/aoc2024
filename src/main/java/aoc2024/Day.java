@@ -2,7 +2,7 @@ package aoc2024;
 
 public interface Day {
 
-    int executePart1(String input);
+    long executePart1(String input);
 
-    int executePart2(String input);
+    long executePart2(String input);
 }

@@ -1,10 +1,5 @@
 package aoc2024;
 
-import org.junit.jupiter.api.Test;
-
-import static org.assertj.core.api.Assertions.assertThat;
-
-
 class Day3Test extends DayTest{
 
     @Override
@@ -23,22 +18,22 @@ class Day3Test extends DayTest{
     }
 
     @Override
-    protected int part1ExampleResult() {
+    protected long part1ExampleResult() {
         return 161;
     }
 
     @Override
-    protected int part1Result() {
+    protected long part1Result() {
         return 190604937;
     }
 
     @Override
-    protected int part2ExampleResult() {
+    protected long part2ExampleResult() {
         return 48;
     }
 
     @Override
-    protected int part2Result() {
+    protected long part2Result() {
         return 82857512;
     }
 

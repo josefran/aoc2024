@@ -8,7 +8,7 @@ import java.util.regex.Pattern;
 public class Day3 implements Day {
 
     @Override
-    public int executePart1(String input) {
+    public long executePart1(String input) {
         List<Multiply> multiplies = Multiply.create(input);
         if (multiplies.isEmpty()) {
             return 0;
@@ -20,7 +20,7 @@ public class Day3 implements Day {
     }
 
     @Override
-    public int executePart2(String input) {
+    public long executePart2(String input) {
         List<Multiply> multiplies = Multiply.createWithEnabled(input);
         if (multiplies.isEmpty()) {
             return 0;

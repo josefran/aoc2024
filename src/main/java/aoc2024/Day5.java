@@ -6,7 +6,7 @@ import java.util.stream.Collectors;
 public class Day5 implements Day {
 
     @Override
-    public int executePart1(String input) {
+    public long executePart1(String input) {
         String[] parts = input.split("\\r?\\n\\r?\\n");
         String pageOrderingRulesInput = parts[0];
         String updateInput = parts[1];
@@ -21,7 +21,7 @@ public class Day5 implements Day {
     }
 
     @Override
-    public int executePart2(String input) {
+    public long executePart2(String input) {
         String[] parts = input.split("\\r?\\n\\r?\\n");
         String pageOrderingRulesInput = parts[0];
         String updateInput = parts[1];

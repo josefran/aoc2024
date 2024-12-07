@@ -8,7 +8,7 @@ import java.util.stream.Collectors;
 public class Day1 implements Day {
 
     @Override
-    public int executePart1(String input) {
+    public long executePart1(String input) {
         List<String> lines = List.of(input.trim().split("\n"));
         SortedLists sortedLists = calculateSortedLists(lines);
 
@@ -21,7 +21,7 @@ public class Day1 implements Day {
     }
 
     @Override
-    public int executePart2(String input) {
+    public long executePart2(String input) {
         List<String> lines = List.of(input.trim().split("\n"));
         return executePart2(lines);
     }

@@ -6,14 +6,14 @@ import java.util.stream.Collectors;
 public class Day6 implements Day {
 
     @Override
-    public int executePart1(String input) {
+    public long executePart1(String input) {
         LaboratoryMap map = LaboratoryMap.create(input);
         Route route = map.calculateRoute();
         return route.numberOfPositions();
     }
 
     @Override
-    public int executePart2(String input) {
+    public long executePart2(String input) {
         LaboratoryMap map = LaboratoryMap.create(input);
         Route route = map.calculateRoute();
         Set<Position> obstructions = map.calculateObstructions(route);

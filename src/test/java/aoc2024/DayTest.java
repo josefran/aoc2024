@@ -11,10 +11,10 @@ public abstract class DayTest {
     private String part1ExampleInput;
     private String part2ExampleInput;
     private String input;
-    private int part1ExampleResult;
-    private int part1Result;
-    private int part2ExampleResult;
-    private int part2Result;
+    private long part1ExampleResult;
+    private long part1Result;
+    private long part2ExampleResult;
+    private long part2Result;
 
     @BeforeEach
     void setup() {
@@ -34,35 +34,39 @@ public abstract class DayTest {
     protected String part2ExampleInput() {
         return part1ExampleInput();
     }
-    protected abstract int part1ExampleResult();
-    protected abstract int part1Result();
-    protected abstract int part2ExampleResult();
-    protected abstract int part2Result();
+
+    protected abstract long part1ExampleResult();
+
+    protected abstract long part1Result();
+
+    protected abstract long part2ExampleResult();
+
+    protected abstract long part2Result();
 
     @Test
     void testPart1Example() {
-        int result = day.executePart1(part1ExampleInput);
+        long result = day.executePart1(part1ExampleInput);
         System.out.println(result);
         assertThat(result).isEqualTo(part1ExampleResult);
     }
 
     @Test
     void testPart1() {
-        int result = day.executePart1(input);
+        long result = day.executePart1(input);
         System.out.println(result);
         assertThat(result).isEqualTo(part1Result);
     }
 
     @Test
     void testPart2Example() {
-        int result = day.executePart2(part2ExampleInput);
+        long result = day.executePart2(part2ExampleInput);
         System.out.println(result);
         assertThat(result).isEqualTo(part2ExampleResult);
     }
 
     @Test
     void testPart2() {
-        int result = day.executePart2(input);
+        long result = day.executePart2(input);
         System.out.println(result);
         assertThat(result).isEqualTo(part2Result);
     }

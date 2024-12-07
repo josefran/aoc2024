@@ -7,17 +7,17 @@ import java.util.List;
 public class Day2 implements Day {
 
     @Override
-    public int executePart1(String input) {
+    public long executePart1(String input) {
         List<Report> reports = buildReports(input);
-        return (int) reports.stream()
+        return reports.stream()
                 .filter(Report::isSecure)
                 .count();
     }
 
     @Override
-    public int executePart2(String input) {
+    public long executePart2(String input) {
         List<Report> reports = buildReports(input);
-        return (int) reports.stream()
+        return reports.stream()
                 .filter(Report::isSecureWithTolerance)
                 .count();
     }

@@ -3,13 +3,13 @@ package aoc2024;
 public class Day4 implements Day {
 
     @Override
-    public int executePart1(String input) {
+    public long executePart1(String input) {
         Matrix matrix = Matrix.create(input);
         return matrix.calculateXMAS();
     }
 
     @Override
-    public int executePart2(String input) {
+    public long executePart2(String input) {
         Matrix matrix = Matrix.create(input);
         return matrix.calculateX_MAS();
     }

@@ -42,22 +42,22 @@ class Day5Test extends DayTest {
    }
 
     @Override
-    protected int part1ExampleResult() {
+    protected long part1ExampleResult() {
         return 143;
     }
 
     @Override
-    protected int part1Result() {
+    protected long part1Result() {
         return 5091;
     }
 
     @Override
-    protected int part2ExampleResult() {
+    protected long part2ExampleResult() {
         return 123;
     }
 
     @Override
-    protected int part2Result() {
+    protected long part2Result() {
         return 4681;
     }
 
