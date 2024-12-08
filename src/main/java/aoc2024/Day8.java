@@ -5,6 +5,8 @@ import java.util.*;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+import static java.util.stream.Stream.*;
+
 public class Day8 implements Day {
     @Override
     public long executePart1(String input) {
@@ -64,13 +66,10 @@ public class Day8 implements Day {
         }
 
         Set<Position> calculateAntinodes(boolean withHarmonics) {
-            for (Map.Entry<Character, Set<Position>> entry : antennas.entrySet()) {
-                Set<PairPosition> pairPositions = calculatePairPositions(entry.getValue());
-                for (PairPosition pair : pairPositions) {
-                    if (withHarmonics) antinodes.addAll(calculateAntinodesWithHarmonics(pair));
-                    else antinodes.addAll(calculateAntinodes(pair));
-                }
-            }
+            antennas.entrySet().stream()
+                    .flatMap(entry -> calculatePairPositions(entry.getValue()).stream())
+                    .flatMap(pair -> calculateAntinodes(pair, withHarmonics).stream())
+                    .forEach(antinodes::add);
             return antinodes;
         }
 
@@ -82,39 +81,39 @@ public class Day8 implements Day {
                     .collect(Collectors.toSet());
         }
 
+        private Set<Position> calculateAntinodes(PairPosition pair, boolean withHarmonics) {
+            if (withHarmonics) return calculateAntinodesWithHarmonics(pair);
+            return calculateAntinodes(pair);
+        }
+
         private Set<Position> calculateAntinodes(PairPosition pair) {
             Distance distance = pair.distance();
-            return Stream.of(pair.position1().addDistance(distance), pair.position2().subtractDistance(distance))
+            return of(
+                    pair.position1().addDistance(distance),
+                    pair.position2().subtractDistance(distance)
+            )
                     .filter(this::isInside)
                     .collect(Collectors.toSet());
         }
 
         private Set<Position> calculateAntinodesWithHarmonics(PairPosition pairPosition) {
             Distance distance = pairPosition.distance();
-            Set<Position> antinodes = new LinkedHashSet<>();
-            antinodes.add(pairPosition.position1());
-            antinodes.add(pairPosition.position2());
-
-            Position newAntinodePosition1 = pairPosition.position1().addDistance(distance);
-            while (isInside(newAntinodePosition1)) {
-                antinodes.add(newAntinodePosition1);
-                newAntinodePosition1 = newAntinodePosition1.addDistance(distance);
-            }
-
-            Position newAntinodePosition2 = pairPosition.position2().subtractDistance(distance);
-            while (isInside(newAntinodePosition2)) {
-                antinodes.add(newAntinodePosition2);
-                newAntinodePosition2 = newAntinodePosition2.subtractDistance(distance);
-            }
-            return antinodes;
+            Stream<Position> initialPositions = of(pairPosition.position1(), pairPosition.position2());
+            Stream<Position> diagonal1 = iterate(
+                    pairPosition.position1().addDistance(distance),
+                    this::isInside,
+                    pos -> pos.addDistance(distance));
+            Stream<Position> diagonal2 = iterate(
+                    pairPosition.position2().subtractDistance(distance),
+                    this::isInside,
+                    pos -> pos.subtractDistance(distance));
+            return concat(initialPositions, concat(diagonal1, diagonal2)).collect(Collectors.toSet());
         }
 
         @SuppressWarnings("unused")
         public void printMap(PrintStream out) {
             char[][] map = map();
-            for (char[] chars : map) {
-                out.println(chars);
-            }
+            Arrays.stream(map).forEach(out::println);
         }
 
         private char[][] map() {
