@@ -18,16 +18,16 @@ public class Day9Test extends DayTest {
 
     @Override
     protected long part1Result() {
-        return 0;
+        return 6211348208140L;
     }
 
     @Override
     protected long part2ExampleResult() {
-        return 0;
+        return 2858;
     }
 
     @Override
     protected long part2Result() {
-        return 0;
+        return 6239783302560L;
     }
 }
