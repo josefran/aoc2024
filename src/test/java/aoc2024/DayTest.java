@@ -1,5 +1,6 @@
 package aoc2024;
 
+import aoc2024.utils.InputProvider;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 

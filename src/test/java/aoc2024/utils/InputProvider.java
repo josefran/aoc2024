@@ -1,4 +1,4 @@
-package aoc2024;
+package aoc2024.utils;
 
 import java.io.IOException;
 import java.net.URISyntaxException;
@@ -9,7 +9,7 @@ import java.util.Objects;
 
 public class InputProvider {
 
-    static String inputToString(String resourcePathString) {
+    public static String inputToString(String resourcePathString) {
         try {
             ClassLoader systemClassLoader = ClassLoader.getSystemClassLoader();
             Path path = Paths.get(Objects.requireNonNull(systemClassLoader.getResource(resourcePathString)).toURI());
