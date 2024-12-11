@@ -6,76 +6,133 @@ import java.util.stream.Collectors;
 public class Day11 implements Day {
     @Override
     public long executePart1(String input) {
-        StoneStraightLine straightLine = StoneBlinker.create(input);
-        StoneStraightLine straightLine25 = StoneBlinker.blink(straightLine, 25);
-        return straightLine25.length();
+        StoneBlinker stoneBlinker = StoneBlinker.create(input);
+        return stoneBlinker.lengthOfBlink(25);
     }
 
     @Override
     public long executePart2(String input) {
-        StoneStraightLine straightLine = StoneBlinker.create(input);
-        StoneStraightLine straightLine75 = StoneBlinker.blink(straightLine, 75);
-        return straightLine75.length();
+        StoneBlinker stoneBlinker = StoneBlinker.create(input);
+        return stoneBlinker.lengthOfBlink(75);
     }
 
-    static class StoneBlinker {
-        private static final Map<List<Long>, StoneStraightLine> cache = new HashMap<>();
+    private static class StoneBlinker {
+        private final StoneGraph graph;
 
-        private StoneBlinker() {}
-
-        public static StoneStraightLine create(String input) {
+        private static StoneBlinker create(String input) {
             String line = input.lines().findFirst().orElseThrow();
-            List<Stone> stones = Arrays.stream(line.split(" "))
+            List<Long> stones = Arrays.stream(line.split(" "))
                     .map(Long::parseLong)
-                    .map(Stone::new)
                     .collect(Collectors.toCollection(LinkedList::new));
-            return new StoneStraightLine(stones);
+            return new StoneBlinker(stones);
         }
 
-        public static StoneStraightLine blink(StoneStraightLine straightLine, int blinks) {
-            List<Long> key = straightLine.stones().stream().map(Stone::number).toList();
-            if (cache.containsKey(key)) {
-                return cache.get(key);
-            }
-
-            StoneStraightLine result = straightLine;
-            for (int i = 0; i < blinks; i++) {
-                result = blink(result);
-            }
-
-            cache.put(key, result);
-            return result;
+        public StoneBlinker(List<Long> stones) {
+            graph = new StoneGraph(stones);
         }
 
-        private static StoneStraightLine blink(StoneStraightLine straightLine) {
-            List<Stone> result = new LinkedList<>();
-            List<Long> stones = straightLine.stones().stream().map(Stone::number).toList();
-            for (long number : stones) {
-                String digits = String.valueOf(number);
-                if (number == 0) {
-                    result.add(new Stone(1));
-                } else if (digits.length() % 2 == 0) {
-                    int half = digits.length() / 2;
-                    long left = Long.parseLong(digits.substring(0, half));
-                    long right = Long.parseLong(digits.substring(half));
-                    result.add(new Stone(left));
-                    result.add(new Stone(right));
+        public long lengthOfBlink(int blinks) {
+            for (int blink = 1; blink <= blinks; blink++) {
+                blink(blink);
+            }
+            return graph.getLengthByBlink(blinks);
+        }
+
+        private void blink(int blink) {
+            List<StoneGraph.StoneNode> nodes = graph.getNodesByBlink(blink - 1);
+            for (StoneGraph.StoneNode parentNode : nodes) {
+                long parentStone = parentNode.getStone();
+                if (graph.containsChildren(parentStone)) {
+                    long apparitions = parentNode.getApparitionsByBlink(blink - 1);
+                    for (StoneGraph.StoneNode node : parentNode.getChildren()) {
+                        node.incrementApparition(blink, apparitions);
+                    }
                 } else {
-                    result.add(new Stone(number * 2024));
+                    String digits = String.valueOf(parentStone);
+                    if (parentStone == 0) {
+                        graph.addEdge(blink, parentStone, 1);
+                    } else if (digits.length() % 2 == 0) {
+                        int half = digits.length() / 2;
+                        long leftStone = Long.parseLong(digits.substring(0, half));
+                        long rightStone = Long.parseLong(digits.substring(half));
+                        graph.addEdge(blink, parentStone, rightStone);
+                        graph.addEdge(blink, parentStone, leftStone);
+                    } else {
+                        graph.addEdge(blink, parentStone, parentStone * 2024L);
+                    }
                 }
             }
-            return new StoneStraightLine(result);
         }
     }
 
-    record StoneStraightLine(List<Stone> stones) {
+    private static class StoneGraph {
+        private final Map<Long, StoneNode> nodes = new HashMap<>();
 
-        public long length() {
-            return stones().size();
+        public StoneGraph(List<Long> stones) {
+            addAllNodes(0, stones);
         }
-    }
 
-    record Stone(long number) {
+        public void addNode(int blink, long stone, long apparitions) {
+            nodes.computeIfAbsent(stone, k -> new StoneNode(stone))
+                    .incrementApparition(blink, apparitions);
+        }
 
+        public void addAllNodes(int blink, List<Long> stones) {
+            stones.forEach(stone -> addNode(blink, stone, 1));
+        }
+
+        public void addEdge(int blink, long parent, long child) {
+            StoneNode parentNode = nodes.get(parent);
+            long apparitionsParent = parentNode.getApparitionsByBlink(blink - 1);
+            addNode(blink, child, apparitionsParent);
+            StoneNode childNode = nodes.get(child);
+            parentNode.addChild(childNode);
+        }
+
+        public boolean containsChildren(long parentStone) {
+            return !nodes.get(parentStone).getChildren().isEmpty();
+        }
+
+        public long getLengthByBlink(int blink) {
+            return getNodesByBlink(blink).stream()
+                    .mapToLong(n -> n.getApparitionsByBlink(blink))
+                    .sum();
+        }
+
+        public List<StoneNode> getNodesByBlink(int blink) {
+            return nodes.values().stream()
+                    .filter(node -> node.apparitionsByBlink.containsKey(blink))
+                    .toList();
+        }
+
+        private static class StoneNode {
+            private final Map<Integer, Long> apparitionsByBlink = new HashMap<>();
+            private final long stone;
+            private final List<StoneNode> children = new ArrayList<>();
+
+            public StoneNode(long stone) {
+                this.stone = stone;
+            }
+
+            public long getStone() {
+                return stone;
+            }
+
+            public List<StoneNode> getChildren() {
+                return children;
+            }
+
+            public void addChild(StoneNode child) {
+                children.add(child);
+            }
+
+            public void incrementApparition(int blink, long parentApparitions) {
+                apparitionsByBlink.merge(blink, parentApparitions, Long::sum);
+            }
+
+            public long getApparitionsByBlink(int blink) {
+                return apparitionsByBlink.getOrDefault(blink, 0L);
+            }
+        }
     }
 }

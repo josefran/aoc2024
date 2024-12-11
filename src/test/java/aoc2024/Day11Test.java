@@ -23,11 +23,11 @@ public class Day11Test extends DayTest {
 
     @Override
     protected long part2ExampleResult() {
-        return -1;
+        return 65601038650482L;
     }
 
     @Override
     protected long part2Result() {
-        return -1;
+        return 241651071960597L;
     }
 }
