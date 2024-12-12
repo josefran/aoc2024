@@ -133,23 +133,26 @@ public class Day12 implements Day {
         }
 
         public int sides() {
-            int vertexes = 0;
-            int minX = parcels.stream().mapToInt(Parcel::x).min().orElseThrow();
-            int minY = parcels.stream().mapToInt(Parcel::y).min().orElseThrow();
-            int maxX = parcels.stream().mapToInt(Parcel::x).max().orElseThrow();
-            int maxY = parcels.stream().mapToInt(Parcel::y).max().orElseThrow();
-            int distanceX = maxX - minX;
-            int distanceY = maxY - minY;
+            return vertices();
+        }
+
+        public int vertices() {
+            Set<String> uniqueVertices = new HashSet<>();
+
             for (Parcel parcel : parcels) {
-                int parcelVertexes = 4; // Each parcel starts with 4 vertexes
-                int countNeighbors = parcels.stream()
-                        .filter(p -> p.isAdjacent(parcel))
-                        .mapToInt(p -> 1)
-                        .sum();
-                 //TODO: Implement the logic to calculate the vertexes
+                int x = parcel.x();
+                int y = parcel.y();
+                String topLeft = (x) + "," + (y);
+                String topRight = (x + 1) + "," + (y);
+                String bottomLeft = (x) + "," + (y + 1);
+                String bottomRight = (x + 1) + "," + (y + 1);
+
+                if (!uniqueVertices.add(topLeft)) uniqueVertices.remove(topLeft);
+                if (!uniqueVertices.add(topRight)) uniqueVertices.remove(topRight);
+                if (!uniqueVertices.add(bottomLeft)) uniqueVertices.remove(bottomLeft);
+                if (!uniqueVertices.add(bottomRight)) uniqueVertices.remove(bottomRight);
             }
-            //TODO: Implement the logic to calculate the vertexes
-            return vertexes;
+            return uniqueVertices.size();
         }
 
         private int perimeter() {
