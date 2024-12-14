@@ -67,8 +67,8 @@ public class Day12 implements Day {
         public static List<Region> calculateRegions(GardenMap gardenMap) {
             Map<Character, List<ParcelGroup>> parcelsGroupsMap = new LinkedHashMap<>();
             char[][] map = gardenMap.map();
-            for (int y = 0; y < map.length; y++) {
-                for (int x = 0; x < map[0].length; x++) {
+            for (int y = 0; y < map[0].length; y++) {
+                for (int x = 0; x < map.length; x++) {
                     char label = map[x][y];
                     int perimeter = gardenMap.perimeter(x, y);
                     Parcel parcel = new Parcel(x, y, perimeter);
@@ -117,6 +117,23 @@ public class Day12 implements Day {
         public boolean isAdjacent(Parcel parcel) {
             return Math.abs(x - parcel.x) + Math.abs(y - parcel.y) == 1;
         }
+
+        public boolean hasAdjacentToRight(Parcel p) {
+            return x == p.x + 1 && y == p.y;
+        }
+
+        public boolean hasAdjacentToLeft(Parcel p) {
+            return x == p.x - 1 && y == p.y;
+        }
+
+        public boolean hasAdjacentToUp(Parcel p) {
+            return x == p.x && y == p.y + 1;
+        }
+
+        public boolean hasAdjacentToDown(Parcel p) {
+            return x == p.x && y == p.y - 1;
+        }
+
     }
 
     record ParcelGroup(char label, Set<Parcel> parcels) {
@@ -133,26 +150,30 @@ public class Day12 implements Day {
         }
 
         public int sides() {
-            return vertices();
-        }
-
-        public int vertices() {
-            Set<String> uniqueVertices = new HashSet<>();
-
+            int vertices = 0;
             for (Parcel parcel : parcels) {
-                int x = parcel.x();
-                int y = parcel.y();
-                String topLeft = (x) + "," + (y);
-                String topRight = (x + 1) + "," + (y);
-                String bottomLeft = (x) + "," + (y + 1);
-                String bottomRight = (x + 1) + "," + (y + 1);
-
-                if (!uniqueVertices.add(topLeft)) uniqueVertices.remove(topLeft);
-                if (!uniqueVertices.add(topRight)) uniqueVertices.remove(topRight);
-                if (!uniqueVertices.add(bottomLeft)) uniqueVertices.remove(bottomLeft);
-                if (!uniqueVertices.add(bottomRight)) uniqueVertices.remove(bottomRight);
+                boolean existsUpVertex = parcels.stream()
+                        .filter(p -> !p.equals(parcel))
+                        .anyMatch(p -> !parcel.hasAdjacentToRight(p) || (parcel.hasAdjacentToRight(p) &&
+                                (parcels.stream().anyMatch(p::hasAdjacentToUp) || parcels.stream().anyMatch(p::hasAdjacentToDown))));
+                if (existsUpVertex) vertices++;
+                boolean existsRightVertex = parcels.stream()
+                        .filter(p -> !p.equals(parcel))
+                        .anyMatch(p -> !parcel.hasAdjacentToDown(p) || (parcel.hasAdjacentToDown(p) &&
+                                (parcels.stream().anyMatch(p::hasAdjacentToLeft) || parcels.stream().anyMatch(p::hasAdjacentToRight))));
+                if (existsRightVertex) vertices++;
+                boolean existsDownVertex = parcels.stream()
+                        .filter(p -> !p.equals(parcel))
+                        .anyMatch(p -> !parcel.hasAdjacentToLeft(p) || (parcel.hasAdjacentToLeft(p) &&
+                                (parcels.stream().anyMatch(p::hasAdjacentToUp) || parcels.stream().anyMatch(p::hasAdjacentToDown))));
+                if (existsDownVertex) vertices++;
+                boolean existsLeftVertex = parcels.stream()
+                        .filter(p -> !p.equals(parcel))
+                        .anyMatch(p -> !parcel.hasAdjacentToUp(p) || (parcel.hasAdjacentToUp(p) &&
+                                (parcels.stream().anyMatch(p::hasAdjacentToRight) || parcels.stream().anyMatch(p::hasAdjacentToLeft))));
+                if (existsLeftVertex) vertices++;
             }
-            return uniqueVertices.size();
+            return vertices;
         }
 
         private int perimeter() {
