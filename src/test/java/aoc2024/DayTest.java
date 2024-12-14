@@ -23,13 +23,16 @@ public abstract class DayTest {
         part1ExampleInput = part1ExampleInput();
         part2ExampleInput = part2ExampleInput();
         String resourceName = day.getClass().getSimpleName().toLowerCase() + "/input";
-        input = InputProvider.inputToString(resourceName);
+        input = obtainInput(resourceName);
         part1ExampleResult = part1ExampleResult();
         part1Result = part1Result();
         part2ExampleResult = part2ExampleResult();
         part2Result = part2Result();
     }
 
+    protected String obtainInput(String resourceName) {
+        return InputProvider.inputToString(resourceName);
+    }
     protected abstract Day dayInstance();
     protected abstract String part1ExampleInput();
     protected String part2ExampleInput() {
