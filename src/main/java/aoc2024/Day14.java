@@ -10,6 +10,7 @@ import java.util.stream.Collectors;
 
 
 public class Day14 implements Day {
+
     @Override
     public long executePart1(String input) {
         TilesMap tilesMap = createMap(input);
@@ -26,6 +27,7 @@ public class Day14 implements Day {
         return calculateSecondWhenFormIsChristmasTree(tilesMap, robots);
     }
 
+    @SuppressWarnings("SameParameterValue")
     private List<Robot> moveRobots(TilesMap tilesMap, List<Robot> robots, int seconds) {
         List<Robot> newRobots = robots;
         for (int i = 0; i < seconds; i++) {
@@ -43,21 +45,27 @@ public class Day14 implements Day {
                     .map(tilesMap::move)
                     .toList();
             second++;
+            if (second % 10000 == 0) {
+                System.out.println("Second: " + second);
+            }
         }
+        System.out.println(tilesMap.mapToString(robots).replaceAll("\\d", "#"));
+
         return second;
     }
 
     private boolean isChristmasTreeForm(TilesMap tilesMap, List<Robot> robots) {
         String map = tilesMap.mapToString(robots);
         for (String line : map.lines().toList()) {
-            line = line.replaceAll("[^.]", "#");
-            if (line.contains("#") && !areAllHashesContiguous(line)) return false;
+            line = line.replaceAll("\\d", "#");
+            if (areAllHashesContiguous(line, 10)) return true;
         }
-        return true;
+        return false;
     }
 
-    private boolean areAllHashesContiguous(String line) {
-        return line.matches("[^#]*#+[^#]*");
+    @SuppressWarnings("SameParameterValue")
+    private boolean areAllHashesContiguous(String line, int count) {
+        return line.matches(".*#{" + count + ",}.*");
     }
 
     private TilesMap createMap(String input) {
@@ -166,9 +174,6 @@ public class Day14 implements Day {
     }
 
     record Position(int x, int y) {
-        boolean isAdjacent(Position other) {
-            return Math.abs(x - other.x) <= 1 && Math.abs(y - other.y) <= 1;
-        }
     }
 
     record Velocity(int x, int y) { //Represents a velocity vector

@@ -35,15 +35,9 @@ public class Day14Test extends DayTest {
         return "11,7\n" + input;
     }
 
-    @Disabled("Not works - infinite")
+    @Disabled("Not needs to be implemented")
     @Test
     void testPart2Example() {
-        super.testPart2Example();
-    }
-
-    @Disabled("Not works - infinite")
-    @Test
-    void testPart2() {
         super.testPart2Example();
     }
 
@@ -64,6 +58,6 @@ public class Day14Test extends DayTest {
 
     @Override
     protected long part2Result() {
-        return -1;
+        return 7916;
     }
 }
