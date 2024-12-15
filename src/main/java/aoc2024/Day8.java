@@ -12,7 +12,6 @@ public class Day8 implements Day {
     public long executePart1(String input) {
         CityMap cityMap = CityMap.create(input);
         Set<Position> antinodes = cityMap.calculateAntinodes(false);
-        //cityMap.printMap(System.out);
         return antinodes.size();
     }
 
@@ -20,7 +19,6 @@ public class Day8 implements Day {
     public long executePart2(String input) {
         CityMap cityMap = CityMap.create(input);
         Set<Position> antinodes = cityMap.calculateAntinodes(true);
-        //cityMap.printMap(System.out);
         return antinodes.size();
     }
 

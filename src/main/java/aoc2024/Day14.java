@@ -43,9 +43,7 @@ public class Day14 implements Day {
                     .map(tilesMap::move)
                     .toList();
             second++;
-            //System.out.println("Second: " + second);
         }
-        System.out.println(tilesMap.mapToString(robots));
         return second;
     }
 

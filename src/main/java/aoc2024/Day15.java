@@ -15,7 +15,6 @@ public class Day15 implements Day {
     @Override
     public long executePart2(String input) {
         Warehouse warehouse = createWarehouse(input, 2);
-        System.out.println(warehouse.map());
         warehouse.moveRobot();
         return warehouse.sumGpsBoxes();
     }
@@ -101,8 +100,8 @@ public class Day15 implements Day {
             this.robot = robot;
             this.movements = movements;
         }
-
-        String map() {
+        
+        public String map() {
             char[][] map = new char[height][width];
             for (char[] row : map) {
                 Arrays.fill(row, '.');
