@@ -50,7 +50,7 @@ public abstract class DayTest {
     @Test
     void testPart1Example() {
         long result = day.executePart1(part1ExampleInput);
-        //System.out.println(result);
+        System.out.println(result);
         assertThat(result).isEqualTo(part1ExampleResult);
     }
 
