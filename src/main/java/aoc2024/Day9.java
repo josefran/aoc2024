@@ -38,8 +38,10 @@ public class Day9 implements Day {
                     blockIndex += emptySpace;
                     diskSize += emptySpace;
                 }
-                DiskFile file = new DiskFile(fileId++, blockIndexes);
-                files.put(file.id(), file);
+                if (!blockIndexes.isEmpty()) {
+                    DiskFile file = new DiskFile(fileId++, blockIndexes);
+                    files.put(file.id(), file);
+                }
             }
             return new DiskMap(diskSize, files);
         }
