@@ -11,8 +11,8 @@ public class Day14Test extends DayTest {
     }
 
     @Override
-    protected String obtainInput(String resourceName) {
-        return "101,103\n" + super.obtainInput(resourceName);
+    protected String input() {
+        return "101,103\n" + super.input();
     }
 
     @Override

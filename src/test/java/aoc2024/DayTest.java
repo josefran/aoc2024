@@ -1,36 +1,14 @@
 package aoc2024;
 
 import aoc2024.utils.InputProvider;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
 public abstract class DayTest {
 
-    private Day day;
-    private String part1ExampleInput;
-    private String part2ExampleInput;
-    private String input;
-    private long part1ExampleResult;
-    private long part1Result;
-    private long part2ExampleResult;
-    private long part2Result;
-
-    @BeforeEach
-    void setup() {
-        day = dayInstance();
-        part1ExampleInput = part1ExampleInput();
-        part2ExampleInput = part2ExampleInput();
-        String resourceName = day.getClass().getSimpleName().toLowerCase() + "/input";
-        input = obtainInput(resourceName);
-        part1ExampleResult = part1ExampleResult();
-        part1Result = part1Result();
-        part2ExampleResult = part2ExampleResult();
-        part2Result = part2Result();
-    }
-
-    protected String obtainInput(String resourceName) {
+    protected String input() {
+        String resourceName = dayInstance().getClass().getSimpleName().toLowerCase() + "/input";
         return InputProvider.inputToString(resourceName);
     }
     protected abstract Day dayInstance();
@@ -49,30 +27,30 @@ public abstract class DayTest {
 
     @Test
     void testPart1Example() {
-        long result = day.executePart1(part1ExampleInput);
+        long result = dayInstance().executePart1(part1ExampleInput());
         System.out.println(result);
-        assertThat(result).isEqualTo(part1ExampleResult);
+        assertThat(result).isEqualTo(part1ExampleResult());
     }
 
     @Test
     void testPart1() {
-        long result = day.executePart1(input);
+        long result = dayInstance().executePart1(input());
         System.out.println(result);
-        assertThat(result).isEqualTo(part1Result);
+        assertThat(result).isEqualTo(part1Result());
     }
 
     @Test
     void testPart2Example() {
-        long result = day.executePart2(part2ExampleInput);
+        long result = dayInstance().executePart2(part2ExampleInput());
         System.out.println(result);
-        assertThat(result).isEqualTo(part2ExampleResult);
+        assertThat(result).isEqualTo(part2ExampleResult());
     }
 
     @Test
     void testPart2() {
-        long result = day.executePart2(input);
+        long result = dayInstance().executePart2(input());
         System.out.println(result);
-        assertThat(result).isEqualTo(part2Result);
+        assertThat(result).isEqualTo(part2Result());
     }
 
 }
