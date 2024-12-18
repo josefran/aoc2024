@@ -1,5 +1,6 @@
 package aoc2024;
 
+
 public interface Day {
 
     long executePart1(String input);
